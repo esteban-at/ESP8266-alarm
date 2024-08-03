@@ -21,7 +21,7 @@
 String ssid;
 String pass;
 String phone;
-String apiKey;
+String apikey;
 
 // Timer variables
 unsigned long previousMillis = 0;
@@ -31,7 +31,7 @@ const long interval = 10000;  // interval to wait for Wi-Fi connection (millisec
 const char* ssidPath = "/ssid.txt";
 const char* passPath = "/pass.txt";
 const char* phonePath = "/phone.txt";
-const char* apiKeyPath = "/apikey.txt";
+const char* apikeyPath = "/apikey.txt";
 
 // Search for parameter in HTTP POST request
 const char* PARAM_INPUT_1 = "ssid";
@@ -119,7 +119,7 @@ bool initWiFiSTA() {
 void sendMessage(String message){
 
   // Data to send with HTTP POST
-  String url = "http://api.callmebot.com/whatsapp.php?phone=" + phone + "&apikey=" + apiKey + "&text=" + urlEncode(message);
+  String url = "http://api.callmebot.com/whatsapp.php?phone=" + phone + "&apikey=" + apikey + "&text=" + urlEncode(message);
   WiFiClient client;    
   HTTPClient http;
   http.begin(client, url);
@@ -130,7 +130,7 @@ void sendMessage(String message){
   // Send HTTP POST request
   int httpResponseCode = http.POST(url);
   if (httpResponseCode == 200){
-    Serial.print("Message sent successfully");
+    Serial.println("Message sent successfully");
   }
   else{
     Serial.println("Error sending the message");
@@ -190,11 +190,11 @@ bool initWiFiAP(){
           }
           // HTTP POST apiKey value
           if (p->name() == PARAM_INPUT_4) {
-            apiKey = p->value().c_str();
+            apikey = p->value().c_str();
             Serial.print("API key set to: ");
-            Serial.println(apiKey);
+            Serial.println(apikey);
             // Write file to save value
-            writeFile(LittleFS, apiKeyPath, apiKey.c_str());
+            writeFile(LittleFS, apikeyPath, apikey.c_str());
           }
           //Serial.printf("POST[%s]: %s\n", p->name().c_str(), p->value().c_str());
         }
@@ -216,11 +216,11 @@ void setup() {
   ssid = readFile(LittleFS, ssidPath);
   pass = readFile(LittleFS, passPath);
   phone = readFile(LittleFS, phonePath);
-  apiKey = readFile (LittleFS, apiKeyPath);
+  apikey = readFile (LittleFS, apikeyPath);
   Serial.println(ssid);
   Serial.println(pass);
   Serial.println(phone);
-  Serial.println(apiKey);
+  Serial.println(apikey);
 
   // First, sets an station mode and Send Message to WhatsAPP
   if(initWiFiSTA()){  
