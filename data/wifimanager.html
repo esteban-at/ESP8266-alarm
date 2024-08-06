@@ -16,18 +16,23 @@
         <form action="/" method="POST">
           <p>
             <label for="ssid">SSID</label>
-            <input type="text" id ="ssid" name="ssid"><br>
+            <input type="text" id ="ssid" name="ssid" value=%SSID_VALUE%><br>
             <label for="pass">Password</label>
-            <input type="text" id ="pass" name="pass"><br>
+            <input type="text" id ="pass" name="pass" value=%PASS_VALUE%><br>
             <label for="phone">Phone Number</label>
-            <input type="text" id ="phone" name="phone"><br>
+            <input type="text" id ="phone" name="phone" value=%PHONE_VALUE%><br>
             <label for="apikey">API Key</label>
-            <input type="text" id ="apikey" name="apikey"><br>
+            <input type="text" id ="apikey" name="apikey" value=%APIKEY_VALUE%><br>
             <input type ="submit" value ="Submit">
           </p>
         </form>
       </div>
     </div>
+  </div>
+  <div class="reset">
+    <a href=\"/reset\">
+      <button class=\"button\">RESET</button>
+    </a>
   </div>
 </body>
 </html>
