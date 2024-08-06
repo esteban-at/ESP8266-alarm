@@ -142,6 +142,24 @@ void sendMessage(String message){
   http.end();
 }
 
+// Replaces placeholder with values
+String processor(const String& var){
+  //Serial.println(var);
+  if(var == "SSID_VALUE"){
+    return ssid;
+  }
+  else if(var == "PASS_VALUE"){
+    return pass;
+  }
+  else if(var == "PHONE_VALUE"){
+    return phone;
+  }
+  else if(var == "APIKEY_VALUE"){
+    return apikey;
+  }
+  return String();
+}
+
 // WIFI-AP Inicialize, (access point mode). Init Web Server.
 bool initWiFiAP(){
     Serial.println("Setting AP (Access Point)");
@@ -153,7 +171,13 @@ bool initWiFiAP(){
 
     // Web Server Root URL
     server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-      request->send(LittleFS, "/wifimanager.html", "text/html");
+      request->send(LittleFS, "/wifimanager.html", "text/html", processor);
+    });
+    // Web Server button URL
+    server.on("/reset", HTTP_GET, [](AsyncWebServerRequest *request){
+      request->send(200, "text/plain", "Done. ESP will restart ");
+      delay(3000);
+      ESP.restart();
     });
     
     server.serveStatic("/", LittleFS, "/");
