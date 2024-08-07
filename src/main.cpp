@@ -224,10 +224,17 @@ bool initWiFiAP(){
         }
       }
       request->send(200, "text/plain", "Done. ESP will restart ");
-      delay(3000);
+      
+      // Whait 3 second to send request
+      Serial.println("Post response sended");
+      Serial.println("Restarting ESP");
+      previousMillis = millis();
+      while((millis()-previousMillis)<3000) {
+      Serial.print(".");
+      delay(100);
+      }
       ESP.restart();
     });
-
     server.begin();    
   return true;
 }
@@ -249,7 +256,13 @@ void setup() {
   // First, sets an station mode and Send Message to WhatsAPP
   if(initWiFiSTA()){  
     sendMessage("ALARMA DISPARADA!!");
-    delay(1000);    
+      // Whait 1 second to send request
+      Serial.println("HTTP message sended");
+      previousMillis = millis();
+      while((millis()-previousMillis)<1000) {
+      Serial.print(".");
+      delay(100);
+      }
   };
 
   // Second, sets an open Access Point to change parameters
