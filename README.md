@@ -13,6 +13,3 @@ Hardware utilizado:
 
 Cuidado con el diseño de la placa, contemplar que no es version 01s. La placa debe tener 3.3V en el pin CH_PD
 
-TODO: 
-+ Mostrar los parámetros guardados en la memoria. -> Ver con función Procesor en el html y el backend.
-+ Agregar botón en el html para reiniciar el módulo sin cambiar de parámetros.

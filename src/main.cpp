@@ -163,7 +163,7 @@ String processor(const String& var){
 // WIFI-AP Inicialize, (access point mode). Init Web Server.
 bool initWiFiAP(){
     Serial.println("Setting AP (Access Point)");
-    WiFi.softAP("ESP-WIFI-MANAGER", NULL);
+    WiFi.softAP("ESP-WIFI-SETUP", NULL);
 
     IPAddress IP = WiFi.softAPIP();
     Serial.print("AP IP address: ");
@@ -171,12 +171,19 @@ bool initWiFiAP(){
 
     // Web Server Root URL
     server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-      request->send(LittleFS, "/wifimanager.html", "text/html", processor);
+      request->send(LittleFS, "/wifimanager.html", String(), false, processor);
     });
-    // Web Server button URL
+    // Web Server reset button URL
     server.on("/reset", HTTP_GET, [](AsyncWebServerRequest *request){
       request->send(200, "text/plain", "Done. ESP will restart ");
-      delay(3000);
+      // Whait 3 second to send request
+      Serial.println("Reset response sended");
+      Serial.println("Restarting ESP");
+      previousMillis = millis();
+      while((millis()-previousMillis)<5000) {
+      Serial.print(".");
+      delay(100);
+      }
       ESP.restart();
     });
     
