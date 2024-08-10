@@ -25,7 +25,7 @@ String apikey;
 
 // Timer variables
 unsigned long previousMillis = 0;
-const long interval = 10000;  // interval to wait for Wi-Fi connection (milliseconds)
+const long interval = 20000;  // interval to wait for Wi-Fi connection (milliseconds)
 
 // LittleFS paths to save input values permanently
 const char* ssidPath = "/ssid.txt";
@@ -41,7 +41,7 @@ const char* PARAM_INPUT_4 = "apikey";
 
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
-
+int resetflag = 0;
 
 // --- Functions ---
 
@@ -99,7 +99,7 @@ bool initWiFiSTA() {
   unsigned long currentMillis = millis();
   previousMillis = currentMillis;
 
-  // Try to connect for interval time (10s)
+  // Try to connect for interval time (30s)
   while(WiFi.status() != WL_CONNECTED) {
     currentMillis = millis();
     delay(100);
@@ -169,27 +169,21 @@ bool initWiFiAP(){
     Serial.print("AP IP address: ");
     Serial.println(IP); 
 
-    // Web Server Root URL
+    // Server - Root
     server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
       request->send(LittleFS, "/wifimanager.html", String(), false, processor);
     });
-    // Web Server reset button URL
+    
+    // Server - Reset button
     server.on("/reset", HTTP_GET, [](AsyncWebServerRequest *request){
       request->send(200, "text/plain", "Done. ESP will restart ");
-      // Whait 3 second to send request
       Serial.println("Reset response sended");
-      Serial.println("Restarting ESP");
-      previousMillis = millis();
-      while((millis()-previousMillis)<5000) {
-      Serial.print(".");
-      delay(100);
-      }
-      ESP.restart();
+      resetflag = 1;
     });
     
     server.serveStatic("/", LittleFS, "/");
     
-    // Server declaration. It updates the variables into LittleFS. Then restart.
+    // Server - Submit button. It updates the variables into LittleFS. Then restart.
     server.on("/", HTTP_POST, [](AsyncWebServerRequest *request) {
       int params = request->params();
       for(int i=0;i<params;i++){
@@ -227,20 +221,10 @@ bool initWiFiAP(){
             // Write file to save value
             writeFile(LittleFS, apikeyPath, apikey.c_str());
           }
-          //Serial.printf("POST[%s]: %s\n", p->name().c_str(), p->value().c_str());
         }
       }
       request->send(200, "text/plain", "Done. ESP will restart ");
-      
-      // Whait 3 second to send request
       Serial.println("Post response sended");
-      Serial.println("Restarting ESP");
-      previousMillis = millis();
-      while((millis()-previousMillis)<3000) {
-      Serial.print(".");
-      delay(100);
-      }
-      ESP.restart();
     });
     server.begin();    
   return true;
@@ -263,20 +247,35 @@ void setup() {
   // First, sets an station mode and Send Message to WhatsAPP
   if(initWiFiSTA()){  
     sendMessage("ALARMA DISPARADA!!");
-      // Whait 1 second to send request
-      Serial.println("HTTP message sended");
-      previousMillis = millis();
-      while((millis()-previousMillis)<1000) {
-      Serial.print(".");
-      delay(100);
-      }
+
+  //if fail to connect, wait 1 second and try again
+  }else{
+    delay(1000);
+    if(initWiFiSTA()){  
+    sendMessage("ALARMA DISPARADA!!");
+    }
   };
 
   // Second, sets an open Access Point to change parameters
     initWiFiAP();
+
+  // Set timer to zero
+  previousMillis = millis();
 }
 
 
 void loop() {
   // Nothing to do. The server started in the initWiFiAP function and wait for update variables
+
+  // Reset handle, with delays out of server callback functions 
+  if(resetflag==1){
+    Serial.println("Restarting ESP");
+    delay(1000);
+    ESP.restart();  
+  }      
+  // Reset module after 10 minutes
+  if(millis()-previousMillis>600000){
+    Serial.println("10 minutes have passed");
+    resetflag=1;
+  }
 }

@@ -88,22 +88,18 @@ html {
   button {
     border: none;
     color: #FEFCFB;
-    padding: 15px 32px;
+    background-color: #034078;
+    padding: 15px 15px;
     text-align: center;
+    text-decoration: none;
+    display: inline-block;
     font-size: 16px;
     width: 100px;
+    margin-right: 10px;
+    margin-bottom: 18px;
     border-radius: 4px;
-    transition-duration: 0.4s;
+    transition-duration: 0.4s;  
   }
-  .button-on {
-    background-color: #034078;
-  }
-  .button-on:hover {
+  .button:hover {
     background-color: #1282A2;
   }
-  .button-off {
-    background-color: #858585;
-  }
-  .button-off:hover {
-    background-color: #252524;
-  } 
