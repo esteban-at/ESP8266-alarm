@@ -2,9 +2,8 @@
   Alarma al whatsapp:
    Cuando se enciende, se conecta a internet (ssid y pass guardados en FS)
    y envía un mensaje al telefono (telefono y key guardados en FS).
-   Se conecta a la salida de la sirena (en paralelo con la sirena interior.)
-   La sirena pasa de 0 a 13.8 V cuando suena. En ese momento se enciende el ESP8266 y envía el mensaje. 
    Luego se inicia en modo AP (access point) y permite cambiar los parametros.
+   Luego de 10 minutos se reinicia el módulo.
 */
 
 #include <Arduino.h>
@@ -16,12 +15,11 @@
 #include "LittleFS.h"
 
 // Program variables
-//const char* ssid = "Cabin 4";
-//const char* password = "tiasilvia";
 String ssid;
 String pass;
 String phone;
 String apikey;
+int resetflag = 0; // if this changes to 1, then the module restart in the next loop
 
 // Timer variables
 unsigned long previousMillis = 0;
@@ -41,7 +39,6 @@ const char* PARAM_INPUT_4 = "apikey";
 
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
-int resetflag = 0;
 
 // --- Functions ---
 
@@ -142,7 +139,7 @@ void sendMessage(String message){
   http.end();
 }
 
-// Replaces placeholder with values
+// Replaces HTML placeholders with values
 String processor(const String& var){
   //Serial.println(var);
   if(var == "SSID_VALUE"){
@@ -225,9 +222,11 @@ bool initWiFiAP(){
       }
       request->send(200, "text/plain", "Done. ESP will restart ");
       Serial.println("Post response sended");
+      resetflag = 1;
     });
+
     server.begin();    
-  return true;
+    return true;
 }
 
 void setup() {
@@ -248,7 +247,7 @@ void setup() {
   if(initWiFiSTA()){  
     sendMessage("ALARMA DISPARADA!!");
 
-  //if fail to connect, wait 1 second and try again
+  // If fails to connect, wait 1 second and try again
   }else{
     delay(1000);
     if(initWiFiSTA()){  
