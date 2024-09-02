@@ -269,7 +269,7 @@ void loop() {
   // Reset handle, with delays out of server callback functions 
   if(resetflag==1){
     Serial.println("Restarting ESP");
-    delay(1000);
+    delay(2000);
     ESP.restart();  
   }      
   // Reset module after 10 minutes
