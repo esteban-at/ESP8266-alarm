@@ -1,5 +1,8 @@
 # ESP8266-alarm
 
+[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/esteban-at/ESP8266-alarm/blob/master/README.md)
+[![es](https://img.shields.io/badge/lang-es-blue.svg)](https://github.com/esteban-at/ESP8266-alarm/blob/master/README.es.md)
+
 Funciones del programa:
 + Inicia en modo Station. Se conecta con SSID y PASS guardados en memoria.
 + Manda mensaje de Alarma al Número de telefono, usando la API key. Ambos guardados en memoria.

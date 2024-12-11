@@ -77,14 +77,17 @@ html {
   label {
     font-size: 1.2rem; 
   }
+  
   .value{
     font-size: 1.2rem;
     color: #1282A2;  
   }
+
   .state {
     font-size: 1.2rem;
     color: #1282A2;
   }
+
   button {
     border: none;
     color: #FEFCFB;
@@ -100,6 +103,7 @@ html {
     border-radius: 4px;
     transition-duration: 0.4s;  
   }
+
   .button:hover {
     background-color: #1282A2;
   }

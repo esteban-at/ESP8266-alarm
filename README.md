@@ -1,23 +1,26 @@
 # ESP8266-alarm
 
-Funciones del programa:
-+ Inicia en modo Station. Se conecta con SSID y PASS guardados en memoria.
-+ Manda mensaje de Alarma al Número de telefono y API key guardados en memoria.
-+ Cambia a modo Access Point. Para cambiar los parámetros conectarse a la red ESP-WIFI-SETUP e ir a 192.168.4.1
-+ Luego de 10 minutos se reinicia el módulo.
+[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/esteban-at/ESP8266-alarm/blob/master/README.md)
+[![es](https://img.shields.io/badge/lang-es-blue.svg)](https://github.com/esteban-at/ESP8266-alarm/blob/master/README.es.md)
 
-Hardware utilizado:
+Program functions:
++ Start in Station Mode. It connects to internet with the SSID and PASS stored in internal memory.
++ Send Alarm message to the Phone number, using the API key. Both stored in memory.
++ Switche to Access Point mode. To change the parameters, connect to the ESP-WIFI-SETUP network and go to 192.168.4.1
++ After 10 minutes the module is restarted.
+
+Hardware:
 + ESP8266-01 
-+ Módulo de reducción de voltaje de 12V a 3.3V (basado en AMS1117)
-+ Bornera para conectar la alimentación
-+ Zocalo de 8 puntos para ESP8266-01
++ Voltage reduction module: 12V to 3.3V  (based on AMS1117)
++ Terminal block for power supply connection
++ 8-point socket for ESP8266-01
 
-Comentarios: 
-+ Si no es la version 01s, la placa debe tener 3.3V en el pin CH_PD.
-+ Ver como obtener API key en https://www.callmebot.com/blog/free-api-whatsapp-messages/
+Comments: 
++ If not version 01s, the board must have 3.3V on the CH_PD pin.
++ See how to get API key in https://www.callmebot.com/blog/free-api-whatsapp-messages/
 
-Conexión y funcionamiento:
+Connection and operation:
 
-Se conecta en la salida de la alarma que va a la sirena, en paralelo con la sirena interior.
+Connects to the alarm output going to the siren, in parallel with the indoor siren.
 
-Cuando se dispara la alarma, la salida a la sirena pasa de 0 a 12 V. Con esa tensión se alimenta el ESP8266 y envía el mensaje.
+When the alarm is triggered, the output to the siren goes from 0 to 12V. This voltage is used to power the ESP8266 and send the message.

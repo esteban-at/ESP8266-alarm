@@ -1,9 +1,6 @@
 /* 
-  Alarma al whatsapp:
-   Cuando se enciende, se conecta a internet (ssid y pass guardados en FS)
-   y envía un mensaje al telefono (telefono y key guardados en FS).
-   Luego se inicia en modo AP (access point) y permite cambiar los parametros.
-   Luego de 10 minutos se reinicia el módulo.
+  WhatsApp alarm notification:
+  You will receive a Whatsapp notification on your cell phone when the home alarm is triggered. 
 */
 
 #include <Arduino.h>
